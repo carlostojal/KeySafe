@@ -1,6 +1,8 @@
 package com.fca.keysafe;
 
+import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,8 +20,6 @@ import java.util.ArrayList;
 
 public class Helpers {
 
-    private String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/keysafe";
-
     public String generatePassword(int len) {
         String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         SecureRandom rnd = new SecureRandom();
@@ -30,8 +30,9 @@ public class Helpers {
         return sb.toString();
     }
 
-    public User getUser() {
+    public User getUser(Context context) {
         User user = new User();
+        String path = context.getFilesDir().toString();
         try {
             FileInputStream fileInputStream = new FileInputStream(new File(path + "/user.csv"));
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
@@ -51,7 +52,8 @@ public class Helpers {
         return user;
     }
 
-    public void createUser(User user) {
+    public boolean createUser(Context context, User user) {
+        String path = context.getFilesDir().toString();
         try {
             File file = new File(path + "/user.csv");
             if(!file.exists())
@@ -60,11 +62,14 @@ public class Helpers {
             fileOutputStream.write((user.getPin()).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
-    public ArrayList<Account> readAccounts() {
+    public ArrayList<Account> readAccounts(Context context) {
         ArrayList<Account> accounts = new ArrayList<>();
+        String path = context.getFilesDir().toString();
         try {
             FileInputStream fileInputStream = new FileInputStream(new File(path + "/accounts.csv"));
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
@@ -86,7 +91,8 @@ public class Helpers {
         return accounts;
     }
 
-    public void saveAccount(Account account) {
+    public void saveAccount(Context context, Account account) {
+        String path = context.getFilesDir().toString();
         try {
             File file = new File(path + "/accounts.csv");
             if(!file.exists())

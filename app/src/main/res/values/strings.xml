@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">KeySafe</string>
+    <string name="pin">PIN</string>
+    <string name="confirm">Confirm</string>
+    <string name="create_pin">Create PIN</string>
+    <string name="login">Login</string>
 </resources>
