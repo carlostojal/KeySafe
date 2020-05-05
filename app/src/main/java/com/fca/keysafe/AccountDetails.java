@@ -19,6 +19,7 @@ public class AccountDetails extends AppCompatActivity {
     private EditText password;
     private Button save;
     private Button delete;
+    private Button generate_password;
 
     private boolean creating_new;
 
@@ -34,6 +35,7 @@ public class AccountDetails extends AppCompatActivity {
         password = findViewById(R.id.password);
         save = findViewById(R.id.save);
         delete = findViewById(R.id.delete);
+        generate_password = findViewById(R.id.generate_password);
 
         save.setVisibility(View.GONE);
 
@@ -43,6 +45,7 @@ public class AccountDetails extends AppCompatActivity {
             setTitle("Add Account");
             delete.setVisibility(View.GONE);
         } else {
+            generate_password.setVisibility(View.GONE);
             if (extras.containsKey("serviceName")) {
                 serviceName.setText(extras.getString("serviceName"));
                 setTitle(extras.getString("serviceName") + " Account");
@@ -166,5 +169,9 @@ public class AccountDetails extends AppCompatActivity {
             this.finish();
         else
             Toast.makeText(this, "Error deleting account.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void generatePassword(View view) {
+        password.setText(new Helpers().generatePassword(8));
     }
 }
