@@ -4,4 +4,9 @@
     <string name="confirm">Confirm</string>
     <string name="create_pin">Create PIN</string>
     <string name="login">Login</string>
+    <string name="service_name">Service Name</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="add_account">Add Account</string>
+    <string name="save">Save</string>
 </resources>
