@@ -91,16 +91,20 @@ public class Helpers {
         return accounts;
     }
 
-    public void saveAccount(Context context, Account account) {
+    public boolean saveAccounts(Context context, ArrayList<Account> accounts) {
         String path = context.getFilesDir().toString();
         try {
             File file = new File(path + "/accounts.csv");
-            if(!file.exists())
-                file.createNewFile();
+            if(file.exists())
+                file.delete();
+            file.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-            fileOutputStream.write((account.getServiceName() + ";" + account.getUsername() + ";" + account.getPassword()).getBytes());
+            for(int i = 0; i < accounts.size(); i++)
+                fileOutputStream.write((accounts.get(i).getServiceName() + ";" + accounts.get(i).getUsername() + ";" + accounts.get(i).getPassword() + "\n").getBytes());
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }
