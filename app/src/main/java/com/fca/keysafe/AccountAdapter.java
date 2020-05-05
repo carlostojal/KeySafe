@@ -29,9 +29,13 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         TextView username = (TextView) rowView.findViewById(R.id.username_label);
         TextView password = (TextView) rowView.findViewById(R.id.password_label);
 
+        StringBuilder passwordBuilder = new StringBuilder();
+        for(int i = 0; i < accounts.get(position).getPassword().length(); i++)
+            passwordBuilder.append("*");
+
         serviceName.setText(accounts.get(position).getServiceName());
         username.setText(accounts.get(position).getUsername());
-        password.setText(accounts.get(position).getPassword());
+        password.setText(passwordBuilder.toString());
 
         return rowView;
     }
