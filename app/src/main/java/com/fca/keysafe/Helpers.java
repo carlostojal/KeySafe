@@ -91,7 +91,7 @@ public class Helpers {
         return accounts;
     }
 
-    public void saveAccounts(Context context, ArrayList<Account> accounts) {
+    public boolean saveAccounts(Context context, ArrayList<Account> accounts) {
         String path = context.getFilesDir().toString();
         try {
             File file = new File(path + "/accounts.csv");
@@ -103,6 +103,8 @@ public class Helpers {
                 fileOutputStream.write((accounts.get(i).getServiceName() + ";" + accounts.get(i).getUsername() + ";" + accounts.get(i).getPassword() + "\n").getBytes());
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }

@@ -81,6 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="19dp"
         android:layout_marginTop="60dp"
+        android:onClick="save"
         android:text="@string/save"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
