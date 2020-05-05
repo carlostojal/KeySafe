@@ -23,6 +23,10 @@ public class Login extends AppCompatActivity {
         error = findViewById(R.id.error);
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
     public void login(View view) {
         if(new Helpers().getUser(this).getPin().equals(pin.getText().toString()))
             this.finish();
