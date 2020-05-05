@@ -12,13 +12,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent;
+
         // the user was not created or the pin is default
         if(new Helpers().getUser(this).getPin().equals("0000")) {
-            Intent intent = new Intent(this, CreatePin.class);
-            startActivity(intent);
+            intent = new Intent(this, CreatePin.class);
         } else { // login
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
+            intent = new Intent(this, Login.class);
         }
+
+        startActivity(intent);
     }
 }
