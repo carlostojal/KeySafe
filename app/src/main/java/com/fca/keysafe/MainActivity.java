@@ -14,6 +14,16 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView list;
 
+    private ArrayList<Account> accounts;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        accounts = new Helpers().readAccounts(this);
+        ArrayAdapter accountAdapter = new AccountAdapter(this, accounts);
+        list.setAdapter(accountAdapter);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,11 +39,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
-
-        ArrayList<Account> accounts = new Helpers().readAccounts(this);
-
-        ArrayAdapter accountAdapter = new AccountAdapter(this, accounts);
-        list.setAdapter(accountAdapter);
     }
 
     public void addAccount(View view) {
