@@ -9,4 +9,5 @@
     <string name="password">Password</string>
     <string name="add_account">Add Account</string>
     <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>

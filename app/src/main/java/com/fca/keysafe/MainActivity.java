@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -39,6 +40,19 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Account selectedAccount = (Account) parent.getItemAtPosition(position);
+
+                Intent intent = new Intent(MainActivity.this, AccountDetails.class);
+                intent.putExtra("serviceName", selectedAccount.getServiceName());
+                intent.putExtra("username", selectedAccount.getUsername());
+                intent.putExtra("password", selectedAccount.getPassword());
+                startActivity(intent);
+            }
+        });
     }
 
     public void addAccount(View view) {
