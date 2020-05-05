@@ -106,38 +106,42 @@ public class AccountDetails extends AppCompatActivity {
     }
 
     public void save(View view) {
-        ArrayList<Account> accounts = new Helpers().readAccounts(this);
+        if(serviceName.getText().toString().length() > 0 && username.getText().toString().length() > 0 && password.getText().toString().length() > 0) {
+            ArrayList<Account> accounts = new Helpers().readAccounts(this);
 
-        String compare_to;
+            String compare_to;
 
-        if(extras.containsKey("serviceName"))
-            compare_to = extras.getString("serviceName");
-        else
-            compare_to = serviceName.getText().toString();
+            if (extras.containsKey("serviceName"))
+                compare_to = extras.getString("serviceName");
+            else
+                compare_to = serviceName.getText().toString();
 
-        boolean exists = false;
-        for(int i = 0; i < accounts.size() && !exists; i++) {
-            if(accounts.get(i).getServiceName().equals(compare_to)) {
-                exists = true;
-                if(creating_new) {
-                    Toast.makeText(this, "That service name is already registered.", Toast.LENGTH_SHORT).show();
-                } else {
-                    accounts.get(i).setServiceName(serviceName.getText().toString());
-                    accounts.get(i).setUsername(username.getText().toString());
-                    accounts.get(i).setPassword(password.getText().toString());
+            boolean exists = false;
+            for (int i = 0; i < accounts.size() && !exists; i++) {
+                if (accounts.get(i).getServiceName().equals(compare_to)) {
+                    exists = true;
+                    if (creating_new) {
+                        Toast.makeText(this, "That service name is already registered.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        accounts.get(i).setServiceName(serviceName.getText().toString());
+                        accounts.get(i).setUsername(username.getText().toString());
+                        accounts.get(i).setPassword(password.getText().toString());
+                    }
                 }
             }
-        }
 
-        if(!exists) {
-            accounts.add(new Account(serviceName.getText().toString(), username.getText().toString(), password.getText().toString()));
-        }
+            if (!exists) {
+                accounts.add(new Account(serviceName.getText().toString(), username.getText().toString(), password.getText().toString()));
+            }
 
-        if(new Helpers().saveAccounts(this, accounts)) {
-            Toast.makeText(this, "Account saved successfully.", Toast.LENGTH_SHORT).show();
-            this.finish();
+            if (new Helpers().saveAccounts(this, accounts)) {
+                Toast.makeText(this, "Account saved successfully.", Toast.LENGTH_SHORT).show();
+                this.finish();
+            } else {
+                Toast.makeText(this, "Error saving account.", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, "Error saving account.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "At least one field is empty.", Toast.LENGTH_SHORT).show();
         }
     }
 
