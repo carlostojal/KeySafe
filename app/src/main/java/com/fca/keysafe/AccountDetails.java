@@ -145,5 +145,26 @@ public class AccountDetails extends AppCompatActivity {
         }
     }
 
+    public void delete(View view) {
+        ArrayList<Account> accounts = new Helpers().readAccounts(this);
 
+        String compare_to;
+
+        if (extras.containsKey("serviceName"))
+            compare_to = extras.getString("serviceName");
+        else
+            compare_to = serviceName.getText().toString();
+
+        for(int i = 0; i < accounts.size(); i++) {
+            if(accounts.get(i).getServiceName().equals(compare_to)) {
+                accounts.remove(accounts.get(i));
+                break;
+            }
+        }
+
+        if(new Helpers().saveAccounts(this, accounts))
+            this.finish();
+        else
+            Toast.makeText(this, "Error deleting account.", Toast.LENGTH_SHORT).show();
+    }
 }
