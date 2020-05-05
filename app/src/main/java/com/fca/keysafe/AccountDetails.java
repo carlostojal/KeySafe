@@ -21,7 +21,7 @@ public class AccountDetails extends AppCompatActivity {
     private Button delete;
     private Button generate_password;
 
-    private boolean creating_new;
+    private boolean creating_new = true;
 
     private Bundle extras;
 
@@ -40,6 +40,9 @@ public class AccountDetails extends AppCompatActivity {
         save.setVisibility(View.GONE);
 
         extras = getIntent().getExtras();
+
+        if(extras.containsKey("creating_new"))
+            creating_new = extras.getBoolean("creating_new");
 
         if(extras.getBoolean("creating_new")) {
             setTitle("Add Account");
@@ -112,36 +115,43 @@ public class AccountDetails extends AppCompatActivity {
         if(serviceName.getText().toString().length() > 0 && username.getText().toString().length() > 0 && password.getText().toString().length() > 0) {
             ArrayList<Account> accounts = new Helpers().readAccounts(this);
 
-            String compare_to;
+            String compare_to_service_name = serviceName.getText().toString();
 
-            if (extras.containsKey("serviceName"))
-                compare_to = extras.getString("serviceName");
-            else
-                compare_to = serviceName.getText().toString();
+            String compare_to_username = username.getText().toString();
 
             boolean exists = false;
+            boolean success = false;
             for (int i = 0; i < accounts.size() && !exists; i++) {
-                if (accounts.get(i).getServiceName().equals(compare_to)) {
+                if (accounts.get(i).getServiceName().equals(compare_to_service_name) && accounts.get(i).getUsername().equals(compare_to_username)) {
                     exists = true;
-                    if (creating_new) {
-                        Toast.makeText(this, "That service name is already registered.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        accounts.get(i).setServiceName(serviceName.getText().toString());
-                        accounts.get(i).setUsername(username.getText().toString());
-                        accounts.get(i).setPassword(password.getText().toString());
-                    }
+                    Toast.makeText(this, "That service name and username are already registered.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             if (!exists) {
-                accounts.add(new Account(serviceName.getText().toString(), username.getText().toString(), password.getText().toString()));
+                if(creating_new) {
+                    accounts.add(new Account(serviceName.getText().toString(), username.getText().toString(), password.getText().toString()));
+                } else {
+                    compare_to_service_name = extras.getString("serviceName");
+                    compare_to_username = extras.getString("username");
+                    for(int i = 0; i < accounts.size(); i++) {
+                        if(accounts.get(i).getServiceName().equals(compare_to_service_name) && accounts.get(i).getUsername().equals(compare_to_username)) {
+                            accounts.get(i).setServiceName(serviceName.getText().toString());
+                            accounts.get(i).setUsername(username.getText().toString());
+                            accounts.get(i).setPassword(password.getText().toString());
+                        }
+                    }
+                }
+                success = true;
             }
 
-            if (new Helpers().saveAccounts(this, accounts)) {
-                Toast.makeText(this, "Account saved successfully.", Toast.LENGTH_SHORT).show();
-                this.finish();
-            } else {
-                Toast.makeText(this, "Error saving account.", Toast.LENGTH_SHORT).show();
+            if(success) {
+                if (new Helpers().saveAccounts(this, accounts)) {
+                    Toast.makeText(this, "Account saved successfully.", Toast.LENGTH_SHORT).show();
+                    this.finish();
+                } else {
+                    Toast.makeText(this, "Error saving account.", Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
             Toast.makeText(this, "At least one field is empty.", Toast.LENGTH_SHORT).show();

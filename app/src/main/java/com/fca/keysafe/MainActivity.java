@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 Account selectedAccount = (Account) parent.getItemAtPosition(position);
 
                 Intent intent = new Intent(MainActivity.this, AccountDetails.class);
+                intent.putExtra("creating_new", false);
                 intent.putExtra("serviceName", selectedAccount.getServiceName());
                 intent.putExtra("username", selectedAccount.getUsername());
                 intent.putExtra("password", selectedAccount.getPassword());
