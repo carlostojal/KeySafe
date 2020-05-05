@@ -56,8 +56,7 @@ public class Helpers {
         String path = context.getFilesDir().toString();
         try {
             File file = new File(path + "/user.csv");
-            if(!file.exists())
-                file.createNewFile();
+            file.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(file, true);
             fileOutputStream.write((user.getPin()).getBytes());
         } catch (IOException e) {
