@@ -10,4 +10,5 @@
     <string name="add_account">Add Account</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="generate_password">Generate Password</string>
 </resources>
