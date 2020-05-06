@@ -84,6 +84,7 @@ public class Helpers {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        sortAccounts("lastChanged", accounts);
         return accounts;
     }
 
@@ -102,5 +103,14 @@ public class Helpers {
             return false;
         }
         return true;
+    }
+
+    private void sortAccounts(String type, ArrayList<Account> accounts) {
+        if(type.equals("serviceName"))
+            Collections.sort(accounts, Account.ServiceNameComparator);
+        else if(type.equals("username"))
+            Collections.sort(accounts, Account.UsernameComparator);
+        else
+            Collections.sort(accounts, Account.LastChangedComparator);
     }
 }

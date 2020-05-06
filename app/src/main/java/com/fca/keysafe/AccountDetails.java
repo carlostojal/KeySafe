@@ -137,7 +137,7 @@ public class AccountDetails extends AppCompatActivity {
 
             if (!exists) {
                 if(creating_new) {
-                    accounts.add(new Account(serviceName.getText().toString(), username.getText().toString(), password.getText().toString(), new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(Calendar.getInstance().getTime())));
+                    accounts.add(new Account(serviceName.getText().toString(), username.getText().toString(), password.getText().toString(), new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime())));
                 } else {
                     compare_to_service_name = extras.getString("serviceName");
                     compare_to_username = extras.getString("username");
