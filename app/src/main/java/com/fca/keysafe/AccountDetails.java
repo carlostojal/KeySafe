@@ -8,15 +8,19 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AccountDetails extends AppCompatActivity {
 
     private EditText serviceName;
     private EditText username;
     private EditText password;
+    private TextView last_edited;
     private Button save;
     private Button delete;
     private Button generate_password;
@@ -33,6 +37,7 @@ public class AccountDetails extends AppCompatActivity {
         serviceName = findViewById(R.id.service);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
+        last_edited = findViewById(R.id.last_edited);
         save = findViewById(R.id.save);
         delete = findViewById(R.id.delete);
         generate_password = findViewById(R.id.generate_password);
@@ -57,6 +62,8 @@ public class AccountDetails extends AppCompatActivity {
                 username.setText(extras.getString("username"));
             if (extras.containsKey("password"))
                 password.setText(extras.getString("password"));
+            if(extras.containsKey("last_edited"))
+                last_edited.setText("Last edited on " + extras.getString("last_edited"));
         }
 
         serviceName.addTextChangedListener(new TextWatcher() {
@@ -130,7 +137,7 @@ public class AccountDetails extends AppCompatActivity {
 
             if (!exists) {
                 if(creating_new) {
-                    accounts.add(new Account(serviceName.getText().toString(), username.getText().toString(), password.getText().toString()));
+                    accounts.add(new Account(serviceName.getText().toString(), username.getText().toString(), password.getText().toString(), new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime())));
                 } else {
                     compare_to_service_name = extras.getString("serviceName");
                     compare_to_username = extras.getString("username");
@@ -139,6 +146,7 @@ public class AccountDetails extends AppCompatActivity {
                             accounts.get(i).setServiceName(serviceName.getText().toString());
                             accounts.get(i).setUsername(username.getText().toString());
                             accounts.get(i).setPassword(password.getText().toString());
+                            accounts.get(i).setLastChanged(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
                         }
                     }
                 }

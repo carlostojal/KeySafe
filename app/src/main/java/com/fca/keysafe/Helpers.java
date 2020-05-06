@@ -1,11 +1,6 @@
 package com.fca.keysafe;
 
 import android.content.Context;
-import android.os.Environment;
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,10 +8,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 
 public class Helpers {
 
@@ -77,7 +74,7 @@ public class Helpers {
 
             String s = null;
             while((s = bufferedReader.readLine()) != null) {
-                accounts.add(new Account(s.split(";")[0], s.split(";")[1], s.split(";")[2]));
+                accounts.add(new Account(s.split(";")[0], s.split(";")[1], s.split(";")[2], s.split(";")[3]));
             }
             fileInputStream.close();
             s = stringBuilder.toString();
@@ -87,6 +84,7 @@ public class Helpers {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        sortAccounts("lastChanged", accounts);
         return accounts;
     }
 
@@ -99,11 +97,20 @@ public class Helpers {
             file.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(file, true);
             for(int i = 0; i < accounts.size(); i++)
-                fileOutputStream.write((accounts.get(i).getServiceName() + ";" + accounts.get(i).getUsername() + ";" + accounts.get(i).getPassword() + "\n").getBytes());
+                fileOutputStream.write((accounts.get(i).getServiceName() + ";" + accounts.get(i).getUsername() + ";" + accounts.get(i).getPassword() + ";" + accounts.get(i).getLastChanged() + "\n").getBytes());
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
         return true;
+    }
+
+    private void sortAccounts(String type, ArrayList<Account> accounts) {
+        if(type.equals("serviceName"))
+            Collections.sort(accounts, Account.ServiceNameComparator);
+        else if(type.equals("username"))
+            Collections.sort(accounts, Account.UsernameComparator);
+        else
+            Collections.sort(accounts, Account.LastChangedComparator);
     }
 }

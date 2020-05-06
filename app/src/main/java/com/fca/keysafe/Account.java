@@ -1,15 +1,21 @@
 package com.fca.keysafe;
 
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+
 public class Account {
 
     private String serviceName;
     private String username;
     private String password;
+    private String lastChanged;
 
-    public Account(String serviceName, String username, String password) {
+    public Account(String serviceName, String username, String password, String lastChanged) {
         this.serviceName = serviceName;
         this.username = username;
         this.password = password;
+        this.lastChanged = lastChanged;
     }
 
     public String getServiceName() {
@@ -35,4 +41,53 @@ public class Account {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getLastChanged() {
+        return lastChanged;
+    }
+
+    public void setLastChanged(String lastChanged) {
+        this.lastChanged = lastChanged;
+    }
+
+    public static Comparator<Account> ServiceNameComparator = new Comparator<Account>() {
+        @Override
+        public int compare(Account o1, Account o2) {
+            String serviceName1 = o1.getServiceName().toLowerCase();
+            String serviceName2 = o2.getServiceName().toLowerCase();
+
+            return serviceName2.compareTo(serviceName1);
+        }
+    };
+
+    public static Comparator<Account> UsernameComparator = new Comparator<Account>() {
+        @Override
+        public int compare(Account o1, Account o2) {
+            String username1 = o1.getUsername();
+            String username2 = o2.getUsername();
+
+            return username1.compareTo(username2);
+        }
+    };
+
+    public static Comparator<Account> LastChangedComparator = new Comparator<Account>() {
+        @Override
+        public int compare(Account o1, Account o2) {
+            Date date1, date2;
+            int diff = 0;
+
+            try {
+                date1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(o1.getLastChanged());
+                date2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(o2.getLastChanged());
+
+                diff = date2.compareTo(date1);
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+            return diff;
+        }
+    };
 }
