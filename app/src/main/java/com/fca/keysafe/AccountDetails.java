@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +26,7 @@ public class AccountDetails extends AppCompatActivity {
     private Button delete;
     private Button generate_password;
 
-    private boolean creating_new = true;
+    private String action = "creating_new";
 
     private Bundle extras;
 
@@ -46,10 +47,10 @@ public class AccountDetails extends AppCompatActivity {
 
         extras = getIntent().getExtras();
 
-        if(extras.containsKey("creating_new"))
-            creating_new = extras.getBoolean("creating_new");
+        if (extras.containsKey("action"))
+            action = extras.getString("action");
 
-        if(extras.getBoolean("creating_new")) {
+        if (action.equals("creating_new")) {
             setTitle("Add Account");
             delete.setVisibility(View.GONE);
         } else {
@@ -62,7 +63,7 @@ public class AccountDetails extends AppCompatActivity {
                 username.setText(extras.getString("username"));
             if (extras.containsKey("password"))
                 password.setText(extras.getString("password"));
-            if(extras.containsKey("last_edited"))
+            if (extras.containsKey("last_edited"))
                 last_edited.setText("Last edited on " + extras.getString("last_edited"));
         }
 
@@ -119,47 +120,59 @@ public class AccountDetails extends AppCompatActivity {
     }
 
     public void save(View view) {
-        if(serviceName.getText().toString().length() > 0 && username.getText().toString().length() > 0 && password.getText().toString().length() > 0) {
+        boolean success = false;
+        // if no field is empty
+        if (serviceName.getText().toString().length() > 0 && username.getText().toString().length() > 0 && password.getText().toString().length() > 0) {
             ArrayList<Account> accounts = new Helpers().readAccounts(this);
 
-            String compare_to_service_name = serviceName.getText().toString();
-
-            String compare_to_username = username.getText().toString();
-
-            boolean exists = false;
-            boolean success = false;
-            for (int i = 0; i < accounts.size() && !exists; i++) {
-                if (accounts.get(i).getServiceName().equals(compare_to_service_name) && accounts.get(i).getUsername().equals(compare_to_username)) {
-                    exists = true;
-                    Toast.makeText(this, "That service name and username are already registered.", Toast.LENGTH_SHORT).show();
+            if (action.equals("creating_new")) {
+                Account account = null;
+                for (Account account1 : accounts) {
+                    if (account1.getServiceName().equals(serviceName.getText().toString()) && account1.getUsername().equals(username.getText().toString()))
+                        account = account1;
                 }
-            }
-
-            if (!exists) {
-                if(creating_new) {
-                    accounts.add(new Account(serviceName.getText().toString(), username.getText().toString(), password.getText().toString(), new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime())));
+                if (account != null) { // if the requested account already exists
+                    Toast.makeText(this, "An account with this service name and username already exist.", Toast.LENGTH_SHORT).show();
                 } else {
-                    compare_to_service_name = extras.getString("serviceName");
-                    compare_to_username = extras.getString("username");
-                    for(int i = 0; i < accounts.size(); i++) {
-                        if(accounts.get(i).getServiceName().equals(compare_to_service_name) && accounts.get(i).getUsername().equals(compare_to_username)) {
-                            accounts.get(i).setServiceName(serviceName.getText().toString());
-                            accounts.get(i).setUsername(username.getText().toString());
-                            accounts.get(i).setPassword(password.getText().toString());
-                            accounts.get(i).setLastChanged(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
+                    account = new Account();
+                    account.setServiceName(serviceName.getText().toString());
+                    account.setUsername(username.getText().toString());
+                    account.setPassword(password.getText().toString());
+                    account.setLastChanged(new Helpers().getStringDate());
+                    accounts.add(account);
+                    success = true;
+                }
+            } else {
+                boolean checked = true;
+                for (Account account : accounts) {
+                    Log.d(null, "service: " + account.getServiceName() + " " + serviceName.getText().toString() + "\nusername: " + account.getUsername() + " " + username.getText().toString());
+                    if((account.getServiceName().equals(serviceName.getText().toString()) && account.getUsername().equals(username.getText().toString())) && (!extras.getString("serviceName").equals(serviceName.getText().toString()) || !extras.getString("username").equals(username.getText().toString()))) {
+                        Toast.makeText(this, "An account with this service name and username already exist.", Toast.LENGTH_SHORT).show();
+                        checked = false;
+                        break;
+                    }
+                }
+
+                if(checked) {
+                    for(Account account : accounts) {
+                        if(account.getServiceName().equals(extras.getString("serviceName")) && account.getUsername().equals(extras.getString("username"))) {
+                            account.setServiceName(serviceName.getText().toString());
+                            account.setUsername(username.getText().toString());
+                            account.setPassword(password.getText().toString());
+                            success = true;
+                            break;
                         }
                     }
                 }
-                success = true;
             }
 
-            if(success) {
-                if (new Helpers().saveAccounts(this, accounts)) {
-                    Toast.makeText(this, "Account saved successfully.", Toast.LENGTH_SHORT).show();
+            if (success) {
+                String message_text = action.equals("creating_new") ? "Account created successfully." : "Account updated successfully.";
+                if (new Helpers().saveAccounts(this, accounts))
                     this.finish();
-                } else {
-                    Toast.makeText(this, "Error saving account.", Toast.LENGTH_SHORT).show();
-                }
+                else // an error occurred saving the accounts to the file
+                    message_text = "Error";
+                Toast.makeText(this, message_text, Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(this, "At least one field is empty.", Toast.LENGTH_SHORT).show();
@@ -176,14 +189,14 @@ public class AccountDetails extends AppCompatActivity {
         else
             compare_to = serviceName.getText().toString();
 
-        for(int i = 0; i < accounts.size(); i++) {
-            if(accounts.get(i).getServiceName().equals(compare_to)) {
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts.get(i).getServiceName().equals(compare_to)) {
                 accounts.remove(accounts.get(i));
                 break;
             }
         }
 
-        if(new Helpers().saveAccounts(this, accounts))
+        if (new Helpers().saveAccounts(this, accounts))
             this.finish();
         else
             Toast.makeText(this, "Error deleting account.", Toast.LENGTH_SHORT).show();
@@ -194,8 +207,8 @@ public class AccountDetails extends AppCompatActivity {
     }
 
     private void updateButtons() {
-        if(!creating_new) {
-            if(!serviceName.getText().toString().equals(extras.getString("serviceName")) || !username.getText().toString().equals(extras.getString("username")) && !password.getText().toString().equals(extras.getString("password")))
+        if (!action.equals("creating_new")) {
+            if (!serviceName.getText().toString().equals(extras.getString("serviceName")) || !username.getText().toString().equals(extras.getString("username")) || !password.getText().toString().equals(extras.getString("password")))
                 save.setVisibility(View.VISIBLE);
             else
                 save.setVisibility(View.GONE);
