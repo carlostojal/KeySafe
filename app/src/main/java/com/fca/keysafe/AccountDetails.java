@@ -79,7 +79,7 @@ public class AccountDetails extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                save.setVisibility(View.VISIBLE);
+                updateButtons();
             }
         });
 
@@ -96,7 +96,7 @@ public class AccountDetails extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                save.setVisibility(View.VISIBLE);
+                updateButtons();
             }
         });
 
@@ -113,7 +113,7 @@ public class AccountDetails extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                save.setVisibility(View.VISIBLE);
+                updateButtons();
             }
         });
     }
@@ -191,5 +191,16 @@ public class AccountDetails extends AppCompatActivity {
 
     public void generatePassword(View view) {
         password.setText(new Helpers().generatePassword(8));
+    }
+
+    private void updateButtons() {
+        if(!creating_new) {
+            if(!serviceName.getText().toString().equals(extras.getString("serviceName")) || !username.getText().toString().equals(extras.getString("username")) && !password.getText().toString().equals(extras.getString("password")))
+                save.setVisibility(View.VISIBLE);
+            else
+                save.setVisibility(View.GONE);
+        } else {
+            save.setVisibility(View.VISIBLE);
+        }
     }
 }
