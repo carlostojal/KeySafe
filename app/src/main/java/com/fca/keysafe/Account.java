@@ -1,15 +1,19 @@
 package com.fca.keysafe;
 
+import java.util.Date;
+
 public class Account {
 
     private String serviceName;
     private String username;
     private String password;
+    private String lastChanged;
 
-    public Account(String serviceName, String username, String password) {
+    public Account(String serviceName, String username, String password, String lastChanged) {
         this.serviceName = serviceName;
         this.username = username;
         this.password = password;
+        this.lastChanged = lastChanged;
     }
 
     public String getServiceName() {
@@ -34,5 +38,13 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLastChanged() {
+        return lastChanged;
+    }
+
+    public void setLastChanged(String lastChanged) {
+        this.lastChanged = lastChanged;
     }
 }
