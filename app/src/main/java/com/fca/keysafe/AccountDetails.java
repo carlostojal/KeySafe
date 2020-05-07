@@ -159,6 +159,7 @@ public class AccountDetails extends AppCompatActivity {
                             account.setServiceName(serviceName.getText().toString());
                             account.setUsername(username.getText().toString());
                             account.setPassword(password.getText().toString());
+                            account.setLastChanged(new Helpers().getStringDate());
                             success = true;
                             break;
                         }
