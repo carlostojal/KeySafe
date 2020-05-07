@@ -11,6 +11,12 @@ public class Account {
     private String password;
     private String lastChanged;
 
+    public Account() {
+        this.serviceName = "serviceName";
+        this.username = "username";
+        this.password = "password";
+    }
+
     public Account(String serviceName, String username, String password, String lastChanged) {
         this.serviceName = serviceName;
         this.username = username;
@@ -74,20 +80,11 @@ public class Account {
         @Override
         public int compare(Account o1, Account o2) {
             Date date1, date2;
-            int diff = 0;
 
-            try {
-                date1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(o1.getLastChanged());
-                date2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(o2.getLastChanged());
+            date1 = new Helpers().stringToDate(o1.getLastChanged());
+            date2 = new Helpers().stringToDate(o2.getLastChanged());
 
-                diff = date2.compareTo(date1);
-            } catch (java.text.ParseException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
-            return diff;
+            return date2.compareTo(date1);
         }
     };
 }

@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 Account selectedAccount = (Account) parent.getItemAtPosition(position);
 
                 Intent intent = new Intent(MainActivity.this, AccountDetails.class);
-                intent.putExtra("creating_new", false);
+                intent.putExtra("action", "editing");
                 intent.putExtra("serviceName", selectedAccount.getServiceName());
                 intent.putExtra("username", selectedAccount.getUsername());
                 intent.putExtra("password", selectedAccount.getPassword());
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void addAccount(View view) {
         Intent intent = new Intent(this, AccountDetails.class);
-        intent.putExtra("creating_new", true);
+        intent.putExtra("action", "creating_new");
         startActivity(intent);
     }
 }
