@@ -69,19 +69,19 @@ public class Autofill extends AutofillService {
 
         if(viewNode.getAutofillHints() != null && viewNode.getAutofillHints().length > 0) {
             // the client app provided autofill hints
-            if(contains(viewNode.getAutofillHints(), "username") || contains(viewNode.getAutofillHints(), "email")) {
+            if(inputType(viewNode.getAutofillHints()).equals("username")) {
                 populateResponseBuilder("username", viewNode);
                 returnedResult = true;
-            } else if(contains(viewNode.getAutofillHints(), "password")) {
+            } else if(inputType(viewNode.getAutofillHints()).equals("password")) {
                 populateResponseBuilder("password", viewNode);
                 returnedResult = true;
             }
         } else if(viewNode.getHint() != null && viewNode.getHint().length() > 0) {
             // the client app haven't provided autofill hints
-            if (contains(viewNode.getHint().split(" "), "username") || contains(viewNode.getHint().split(" "), "email")) {
+            if (inputType(viewNode.getHint().split(" ")).equals("username")) {
                 populateResponseBuilder("username", viewNode);
                 returnedResult = true;
-            } else if (contains(viewNode.getHint().split(" "), "password")) {
+            } else if (inputType(viewNode.getHint().split(" ")).equals("password")) {
                 populateResponseBuilder("password", viewNode);
                 returnedResult = true;
             }
@@ -101,16 +101,18 @@ public class Autofill extends AutofillService {
         for(Account account : accounts) {
 
             RemoteViews presentation = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);
-            String value = account.getServiceName();
+            String value;
+            String presentation_value = account.getServiceName();
 
-            if (query.equals("username")) // is an username field
-                value += " (" + account.getUsername() + ")";
-            else
-                value += " (" + account.getPassword() + ")";
+            if (query.equals("username")) { // is an username field
+                value = account.getUsername();
+                presentation_value += " (" + value + ")";
+            } else {
+                value = account.getPassword();
+                presentation_value += " (" + value + ")";
+            }
 
-            presentation.setTextViewText(android.R.id.text1, value);
-            // presentation.setTextViewText(android.R.id.text1, account.getServiceName());
-            // presentation.setTextViewText(android.R.id.text2, value);
+            presentation.setTextViewText(android.R.id.text1, presentation_value);
 
             Dataset.Builder datasetBuilder = new Dataset.Builder();
             datasetBuilder.setValue(viewNode.getAutofillId(), AutofillValue.forText(value), presentation);
@@ -121,9 +123,18 @@ public class Autofill extends AutofillService {
 
     public boolean contains(String[] arr, String query) {
         for(String s : arr) {
-            if(s.toLowerCase().equals(query))
+            if(s.toLowerCase().equals(query.toLowerCase()))
                 return true;
         }
         return false;
+    }
+
+    public String inputType(String[] arr) {
+        if(contains(arr, "username") || contains(arr, "user") || contains(arr, "email"))
+            return "username";
+        else if(contains(arr, "password") || contains(arr, "pass") || contains(arr, "pin"))
+            return "password";
+        else
+            return "unknown";
     }
 }
