@@ -1,8 +1,6 @@
 package com.fca.keysafe;
 
 import android.app.assist.AssistStructure;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.service.autofill.AutofillService;
