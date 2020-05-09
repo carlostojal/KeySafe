@@ -101,14 +101,16 @@ public class Autofill extends AutofillService {
         for(Account account : accounts) {
 
             RemoteViews presentation = new RemoteViews(getPackageName(), android.R.layout.simple_list_item_1);
-            String value;
+            String value = account.getServiceName();
 
             if (query.equals("username")) // is an username field
-                value = account.getUsername();
+                value += " (" + account.getUsername() + ")";
             else
-                value = account.getPassword();
+                value += " (" + account.getPassword() + ")";
 
             presentation.setTextViewText(android.R.id.text1, value);
+            // presentation.setTextViewText(android.R.id.text1, account.getServiceName());
+            // presentation.setTextViewText(android.R.id.text2, value);
 
             Dataset.Builder datasetBuilder = new Dataset.Builder();
             datasetBuilder.setValue(viewNode.getAutofillId(), AutofillValue.forText(value), presentation);
