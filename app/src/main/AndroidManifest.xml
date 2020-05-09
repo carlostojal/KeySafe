@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <service
             android:name=".Autofill"
             android:label="KeySafe"
@@ -20,6 +21,7 @@
                 <action android:name="android.service.autofill.AutofillService" />
             </intent-filter>
         </service>
+
         <activity android:name=".AccountDetails" />
         <activity android:name=".Login" />
         <activity android:name=".CreatePin" />
