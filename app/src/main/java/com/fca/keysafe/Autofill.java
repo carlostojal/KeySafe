@@ -109,7 +109,10 @@ public class Autofill extends AutofillService {
                 presentation_value += " (" + value + ")";
             } else {
                 value = account.getPassword();
-                presentation_value += " (" + value + ")";
+                StringBuilder sb = new StringBuilder();
+                for(int i = 0; i < value.length(); i++)
+                    sb.append("*");
+                presentation_value += " (" + sb.toString() + ")";
             }
 
             presentation.setTextViewText(android.R.id.text1, presentation_value);
