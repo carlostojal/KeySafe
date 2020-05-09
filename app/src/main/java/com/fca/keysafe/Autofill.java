@@ -133,7 +133,7 @@ public class Autofill extends AutofillService {
     }
 
     public String inputType(String[] arr) {
-        if(contains(arr, "username") || contains(arr, "user") || contains(arr, "email"))
+        if(contains(arr, "username") || contains(arr, "user") || contains(arr, "email") || contains(arr, "e-mail"))
             return "username";
         else if(contains(arr, "password") || contains(arr, "pass") || contains(arr, "pin"))
             return "password";
