@@ -1,8 +1,14 @@
 package com.fca.keysafe;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -44,5 +50,11 @@ public class CreatePin extends AppCompatActivity {
         } else {
             Toast.makeText(this, "The PIN must be 4 digits long.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void enableAutofill(View view) {
+        Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE, Uri.parse("package:" + getPackageName()));
+        startActivityForResult(intent, Activity.RESULT_OK);
     }
 }

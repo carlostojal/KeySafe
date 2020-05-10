@@ -3,6 +3,7 @@
     <string name="pin">PIN</string>
     <string name="confirm">Confirm</string>
     <string name="create_pin">Create PIN</string>
+    <string name="enable_keysafe_autofill">Enable KeySafe autofill</string>
     <string name="login">Login</string>
     <string name="service_name">Service Name</string>
     <string name="username">Username</string>
