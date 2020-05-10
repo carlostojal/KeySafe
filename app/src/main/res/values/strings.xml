@@ -4,6 +4,7 @@
     <string name="confirm">Confirm</string>
     <string name="create_pin">Create PIN</string>
     <string name="enable_keysafe_autofill">Enable KeySafe autofill</string>
+    <string name="enable_keysafe_autofill_description">Enable KeySafe autofill functionality to have your saved credentials suggested in your apps.</string>
     <string name="login">Login</string>
     <string name="service_name">Service Name</string>
     <string name="username">Username</string>
