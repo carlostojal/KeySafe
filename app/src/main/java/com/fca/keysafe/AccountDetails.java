@@ -9,15 +9,27 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class AccountDetails extends AppCompatActivity {
 
+    private TextView previewImageLabel;
+    private ImageView previewImage;
     private EditText serviceName;
     private EditText username;
     private EditText password;
@@ -35,6 +47,8 @@ public class AccountDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_details);
 
+        previewImageLabel = findViewById(R.id.preview_image_label);
+        previewImage = findViewById(R.id.preview_image);
         serviceName = findViewById(R.id.service);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -53,6 +67,8 @@ public class AccountDetails extends AppCompatActivity {
         if (action.equals("creating_new")) {
             setTitle("Add Account");
             delete.setVisibility(View.GONE);
+            previewImageLabel.setVisibility(View.GONE);
+            previewImage.setVisibility(View.GONE);
         } else {
             generate_password.setVisibility(View.GONE);
             if (extras.containsKey("serviceName")) {
@@ -80,7 +96,7 @@ public class AccountDetails extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                updateButtons();
+                update();
             }
         });
 
@@ -97,7 +113,7 @@ public class AccountDetails extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                updateButtons();
+                update();
             }
         });
 
@@ -114,7 +130,7 @@ public class AccountDetails extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                updateButtons();
+                update();
             }
         });
     }
@@ -207,7 +223,7 @@ public class AccountDetails extends AppCompatActivity {
         password.setText(new Helpers().generatePassword(8));
     }
 
-    private void updateButtons() {
+    private void update() {
         if (!action.equals("creating_new")) {
             if (!serviceName.getText().toString().equals(extras.getString("serviceName")) || !username.getText().toString().equals(extras.getString("username")) || !password.getText().toString().equals(extras.getString("password")))
                 save.setVisibility(View.VISIBLE);
@@ -216,5 +232,37 @@ public class AccountDetails extends AppCompatActivity {
         } else {
             save.setVisibility(View.VISIBLE);
         }
+        previewImageLabel.setVisibility(View.VISIBLE);
+        previewImage.setVisibility(View.VISIBLE);
+        updatePreviewImage();
+    }
+
+    private void updatePreviewImage() {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        String url = "https://pixabay.com/api/?key=16532900-508eb48a9692e4da4b4116373&q=" + serviceName.getText().toString() + "+logo";
+
+        Log.d(null, url);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.d(null, response.toString());
+                    new ImageFromUrl(previewImage).execute(response.getJSONArray("hits").getJSONObject(0).getString("webformatURL"));
+                } catch (JSONException e) {
+                    Log.d(null, "Error parsing API response");
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(null, "Error requesting API");
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
     }
 }

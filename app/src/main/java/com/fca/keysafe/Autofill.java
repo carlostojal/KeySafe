@@ -89,8 +89,7 @@ public class Autofill extends AutofillService {
 
         for(int i = 0; i < viewNode.getChildCount(); i++) {
             AssistStructure.ViewNode childNode = viewNode.getChildAt(i);
-            if(traverseNode(childNode))
-                returnedResult = true;
+            traverseNode(childNode);
         }
 
         return returnedResult;
