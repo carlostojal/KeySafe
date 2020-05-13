@@ -52,7 +52,6 @@ public class AccountDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_details);
 
-        previewImageLabel = findViewById(R.id.preview_image_label);
         previewImage = findViewById(R.id.preview_image);
         serviceName = findViewById(R.id.service);
         username = findViewById(R.id.username);
@@ -76,8 +75,6 @@ public class AccountDetails extends AppCompatActivity {
         if (action.equals("creating_new")) {
             setTitle("Add Account");
             delete.setVisibility(View.GONE);
-            previewImageLabel.setVisibility(View.GONE);
-            previewImage.setVisibility(View.GONE);
         } else {
             generate_password.setVisibility(View.GONE);
             if (extras.containsKey("serviceName")) {
@@ -244,8 +241,6 @@ public class AccountDetails extends AppCompatActivity {
         } else {
             save.setVisibility(View.VISIBLE);
         }
-        previewImageLabel.setVisibility(View.VISIBLE);
-        previewImage.setVisibility(View.VISIBLE);
         if(!last_service_name.equals(serviceName.getText().toString()))
             updatePreviewImage();
         last_service_name = serviceName.getText().toString();

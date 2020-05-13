@@ -3,6 +3,7 @@ package com.fca.keysafe;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.ImageView;
 
 import java.io.IOException;
@@ -35,5 +36,6 @@ public class ImageFromUrl extends AsyncTask<String, Void, Bitmap> {
 
     protected void onPostExecute(Bitmap result) {
         imageView.setImageBitmap(result);
+        imageView.setVisibility(View.VISIBLE);
     }
 }
