@@ -17,7 +17,7 @@ public class Account {
         this.username = "username";
         this.password = "password";
         this.lastChanged = "lastChanged";
-        this.previewImgUrl = "";
+        this.previewImgUrl = "previewImgUrl";
     }
 
     public Account(String serviceName, String username, String password, String lastChanged, String previewImgUrl) {
