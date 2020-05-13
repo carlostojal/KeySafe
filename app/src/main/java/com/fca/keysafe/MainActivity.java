@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("username", selectedAccount.getUsername());
                 intent.putExtra("password", selectedAccount.getPassword());
                 intent.putExtra("last_edited", selectedAccount.getLastChanged());
+                intent.putExtra("preview_image", selectedAccount.getPreviewImgUrl());
                 startActivity(intent);
             }
         });

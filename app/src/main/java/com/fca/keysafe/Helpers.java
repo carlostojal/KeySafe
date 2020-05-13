@@ -1,6 +1,17 @@
 package com.fca.keysafe;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +35,7 @@ public class Helpers {
         SecureRandom rnd = new SecureRandom();
 
         StringBuilder sb = new StringBuilder(len);
-        for(int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++)
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
         return sb.toString();
     }
@@ -38,7 +49,7 @@ public class Helpers {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
             String s = null;
-            while((s = bufferedReader.readLine()) != null) {
+            while ((s = bufferedReader.readLine()) != null) {
                 user.setPin(s);
             }
             fileInputStream.close();
@@ -75,8 +86,9 @@ public class Helpers {
             StringBuilder stringBuilder = new StringBuilder();
 
             String s = null;
-            while((s = bufferedReader.readLine()) != null) {
-                accounts.add(new Account(s.split(";")[0], s.split(";")[1], s.split(";")[2], s.split(";")[3]));
+            while ((s = bufferedReader.readLine()) != null) {
+                Log.d(null, s);
+                accounts.add(new Account(s.split(";")[0], s.split(";")[1], s.split(";")[2], s.split(";")[3], s.split(";")[4]));
             }
             fileInputStream.close();
             s = stringBuilder.toString();
@@ -94,12 +106,12 @@ public class Helpers {
         String path = context.getFilesDir().toString();
         try {
             File file = new File(path + "/accounts.csv");
-            if(file.exists())
+            if (file.exists())
                 file.delete();
             file.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-            for(int i = 0; i < accounts.size(); i++)
-                fileOutputStream.write((accounts.get(i).getServiceName() + ";" + accounts.get(i).getUsername() + ";" + accounts.get(i).getPassword() + ";" + accounts.get(i).getLastChanged() + "\n").getBytes());
+            for (int i = 0; i < accounts.size(); i++)
+                fileOutputStream.write((accounts.get(i).getServiceName() + ";" + accounts.get(i).getUsername() + ";" + accounts.get(i).getPassword() + ";" + accounts.get(i).getLastChanged() + ";" + accounts.get(i).getPreviewImgUrl() + "\n").getBytes());
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -108,9 +120,9 @@ public class Helpers {
     }
 
     private void sortAccounts(String type, ArrayList<Account> accounts) {
-        if(type.equals("serviceName"))
+        if (type.equals("serviceName"))
             Collections.sort(accounts, Account.ServiceNameComparator);
-        else if(type.equals("username"))
+        else if (type.equals("username"))
             Collections.sort(accounts, Account.UsernameComparator);
         else
             Collections.sort(accounts, Account.LastChangedComparator);

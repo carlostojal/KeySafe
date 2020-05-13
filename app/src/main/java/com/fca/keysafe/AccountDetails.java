@@ -38,9 +38,14 @@ public class AccountDetails extends AppCompatActivity {
     private Button delete;
     private Button generate_password;
 
+    private String last_service_name;
+    private String preview_img_url;
+
     private String action = "creating_new";
 
     private Bundle extras;
+
+    ArrayList<Account> accounts;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -58,6 +63,10 @@ public class AccountDetails extends AppCompatActivity {
         generate_password = findViewById(R.id.generate_password);
 
         save.setVisibility(View.GONE);
+
+        accounts = new Helpers().readAccounts(this);
+
+        last_service_name = serviceName.getText().toString();
 
         extras = getIntent().getExtras();
 
@@ -81,6 +90,8 @@ public class AccountDetails extends AppCompatActivity {
                 password.setText(extras.getString("password"));
             if (extras.containsKey("last_edited"))
                 last_edited.setText("Last edited on " + extras.getString("last_edited"));
+            if(extras.containsKey("preview_image"))
+                new ImageFromUrl(previewImage).execute(extras.getString("preview_image"));
         }
 
         serviceName.addTextChangedListener(new TextWatcher() {
@@ -155,6 +166,7 @@ public class AccountDetails extends AppCompatActivity {
                     account.setUsername(username.getText().toString());
                     account.setPassword(password.getText().toString());
                     account.setLastChanged(new Helpers().getStringDate());
+                    account.setPreviewImgUrl(preview_img_url);
                     accounts.add(account);
                     success = true;
                 }
@@ -176,6 +188,7 @@ public class AccountDetails extends AppCompatActivity {
                             account.setUsername(username.getText().toString());
                             account.setPassword(password.getText().toString());
                             account.setLastChanged(new Helpers().getStringDate());
+                            account.setPreviewImgUrl(preview_img_url);
                             success = true;
                             break;
                         }
@@ -197,7 +210,6 @@ public class AccountDetails extends AppCompatActivity {
     }
 
     public void delete(View view) {
-        ArrayList<Account> accounts = new Helpers().readAccounts(this);
 
         String compare_to;
 
@@ -234,7 +246,9 @@ public class AccountDetails extends AppCompatActivity {
         }
         previewImageLabel.setVisibility(View.VISIBLE);
         previewImage.setVisibility(View.VISIBLE);
-        updatePreviewImage();
+        if(!last_service_name.equals(serviceName.getText().toString()))
+            updatePreviewImage();
+        last_service_name = serviceName.getText().toString();
     }
 
     private void updatePreviewImage() {
@@ -250,7 +264,10 @@ public class AccountDetails extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     Log.d(null, response.toString());
-                    new ImageFromUrl(previewImage).execute(response.getJSONArray("hits").getJSONObject(0).getString("webformatURL"));
+                    String url = response.getJSONArray("hits").getJSONObject(0).getString("webformatURL");
+                    new ImageFromUrl(previewImage).execute(url);
+                    updateAccountPreviewImageUrl(url);
+                    preview_img_url = url;
                 } catch (JSONException e) {
                     Log.d(null, "Error parsing API response");
                     e.printStackTrace();
@@ -264,5 +281,22 @@ public class AccountDetails extends AppCompatActivity {
         });
 
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void updateAccountPreviewImageUrl(String url) {
+
+        String compare_to;
+
+        if (extras.containsKey("serviceName"))
+            compare_to = extras.getString("serviceName");
+        else
+            compare_to = serviceName.getText().toString();
+
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts.get(i).getServiceName().equals(compare_to)) {
+                accounts.get(i).setPreviewImgUrl(url);
+                break;
+            }
+        }
     }
 }

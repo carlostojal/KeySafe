@@ -10,18 +10,22 @@ public class Account {
     private String username;
     private String password;
     private String lastChanged;
+    private String previewImgUrl;
 
     public Account() {
         this.serviceName = "serviceName";
         this.username = "username";
         this.password = "password";
+        this.lastChanged = "lastChanged";
+        this.previewImgUrl = "";
     }
 
-    public Account(String serviceName, String username, String password, String lastChanged) {
+    public Account(String serviceName, String username, String password, String lastChanged, String previewImgUrl) {
         this.serviceName = serviceName;
         this.username = username;
         this.password = password;
         this.lastChanged = lastChanged;
+        this.previewImgUrl = previewImgUrl;
     }
 
     public String getServiceName() {
@@ -54,6 +58,14 @@ public class Account {
 
     public void setLastChanged(String lastChanged) {
         this.lastChanged = lastChanged;
+    }
+
+    public String getPreviewImgUrl() {
+        return previewImgUrl;
+    }
+
+    public void setPreviewImgUrl(String previewImgUrl) {
+        this.previewImgUrl = previewImgUrl;
     }
 
     public static Comparator<Account> ServiceNameComparator = new Comparator<Account>() {

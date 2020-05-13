@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = layoutInflater.inflate(R.layout.account, parent, false);
 
+        ImageView previewImage = (ImageView) rowView.findViewById(R.id.preview_image);
         TextView serviceName = (TextView) rowView.findViewById(R.id.service_name);
         TextView username = (TextView) rowView.findViewById(R.id.username_label);
         TextView password = (TextView) rowView.findViewById(R.id.password_label);
@@ -36,6 +38,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         serviceName.setText(accounts.get(position).getServiceName());
         username.setText(accounts.get(position).getUsername());
         password.setText(passwordBuilder.toString());
+        new ImageFromUrl(previewImage).execute(accounts.get(position).getPreviewImgUrl());
 
         return rowView;
     }
