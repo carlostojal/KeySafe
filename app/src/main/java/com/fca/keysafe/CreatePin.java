@@ -38,7 +38,7 @@ public class CreatePin extends AppCompatActivity {
     public void createPin(View view) {
         if(pin.getText().length() == 4) {
             if (pin.getText().toString().equals(confirm.getText().toString())) {
-                if (true /*new Helpers().createUser(this, new User(pin.getText().toString()))*/) {
+                if (new Helpers().createUser(this, new User(pin.getText().toString()))) {
                     Toast.makeText(this, "PIN created successfully.", Toast.LENGTH_SHORT).show();
                     this.finish();
                     startActivity(new Intent(this, EnableAutofill.class));
