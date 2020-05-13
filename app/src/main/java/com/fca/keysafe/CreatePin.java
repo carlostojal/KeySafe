@@ -9,7 +9,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
+import android.view.autofill.AutofillManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -36,9 +38,10 @@ public class CreatePin extends AppCompatActivity {
     public void createPin(View view) {
         if(pin.getText().length() == 4) {
             if (pin.getText().toString().equals(confirm.getText().toString())) {
-                if (new Helpers().createUser(this, new User(pin.getText().toString()))) {
+                if (true /*new Helpers().createUser(this, new User(pin.getText().toString()))*/) {
                     Toast.makeText(this, "PIN created successfully.", Toast.LENGTH_SHORT).show();
                     this.finish();
+                    startActivity(new Intent(this, EnableAutofill.class));
                 } else {
                     Toast.makeText(this, "Error creating PIN.", Toast.LENGTH_SHORT).show();
                 }
@@ -48,11 +51,5 @@ public class CreatePin extends AppCompatActivity {
         } else {
             Toast.makeText(this, "The PIN must be 4 digits long.", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void enableAutofill(View view) {
-        Intent intent = new Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE, Uri.parse("package:" + getPackageName()));
-        startActivityForResult(intent, Activity.RESULT_OK);
     }
 }

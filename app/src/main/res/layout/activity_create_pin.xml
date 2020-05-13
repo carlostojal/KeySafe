@@ -54,28 +54,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/confirm_label" />
 
-        <TextView
-            android:id="@+id/enable_autofill_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="20dp"
-            android:text="@string/enable_keysafe_autofill_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/confirm" />
-
-        <Button
-            android:id="@+id/enable_autofill"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:onClick="enableAutofill"
-            android:text="@string/enable_keysafe_autofill"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/enable_autofill_label" />
-
         <Button
             android:id="@+id/create_btn"
             android:layout_width="wrap_content"
@@ -85,7 +63,7 @@
             android:onClick="createPin"
             android:text="@string/create_pin"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/enable_autofill" />
+            app:layout_constraintTop_toBottomOf="@+id/confirm" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
