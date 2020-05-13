@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="19dp"
-            android:layout_marginTop="34dp"
+            android:layout_marginTop="30dp"
             android:onClick="createPin"
             android:text="@string/create_pin"
             app:layout_constraintStart_toStartOf="parent"
