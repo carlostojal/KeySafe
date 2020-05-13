@@ -101,8 +101,8 @@
             android:id="@+id/last_edited"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password" />
 
@@ -115,7 +115,7 @@
             android:onClick="save"
             android:text="@string/save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintTop_toBottomOf="@+id/last_edited"
             tools:visibility="visible" />
 
         <Button
@@ -123,11 +123,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="0dp"
             android:onClick="delete"
             android:text="@string/delete"
             app:layout_constraintStart_toEndOf="@+id/save"
-            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintTop_toTopOf="@+id/save"
             tools:visibility="visible" />
 
         <Button
@@ -135,11 +135,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="0dp"
             android:onClick="generatePassword"
             android:text="@string/generate_password"
             app:layout_constraintStart_toEndOf="@+id/delete"
-            app:layout_constraintTop_toBottomOf="@+id/password" />
+            app:layout_constraintTop_toTopOf="@+id/delete" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
