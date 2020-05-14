@@ -36,12 +36,15 @@ public class Autofill extends AutofillService {
 
         accounts = new Helpers().readAccounts(getApplicationContext());
 
-        boolean success = traverseStructure(structure);
+        traverseStructure(structure);
 
-        Log.d(null, "Found: " + success);
-
-        if(success)
+        try {
             callback.onSuccess(fillResponseBuilder.build());
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -49,41 +52,31 @@ public class Autofill extends AutofillService {
 
     }
 
-    public boolean traverseStructure(AssistStructure structure){
+    public void traverseStructure(AssistStructure structure){
         int nodes = structure.getWindowNodeCount();
-
-        boolean returnedResult = false;
 
         for(int i = 0; i < nodes; i++) {
             AssistStructure.WindowNode windowNode = structure.getWindowNodeAt(i);
             AssistStructure.ViewNode viewNode = windowNode.getRootViewNode();
-            if(traverseNode(viewNode))
-                returnedResult = true;
+            traverseNode(viewNode);
         }
-
-        return returnedResult;
     }
 
-    public boolean traverseNode(AssistStructure.ViewNode viewNode) {
-        boolean returnedResult = false;
+    public void traverseNode(AssistStructure.ViewNode viewNode) {
 
         if(viewNode.getAutofillHints() != null && viewNode.getAutofillHints().length > 0) {
             // the client app provided autofill hints
             if(inputType(viewNode.getAutofillHints()).equals("username")) {
                 populateResponseBuilder("username", viewNode);
-                returnedResult = true;
             } else if(inputType(viewNode.getAutofillHints()).equals("password")) {
                 populateResponseBuilder("password", viewNode);
-                returnedResult = true;
             }
         } else if(viewNode.getHint() != null && viewNode.getHint().length() > 0) {
             // the client app haven't provided autofill hints
             if (inputType(viewNode.getHint().split(" ")).equals("username")) {
                 populateResponseBuilder("username", viewNode);
-                returnedResult = true;
             } else if (inputType(viewNode.getHint().split(" ")).equals("password")) {
                 populateResponseBuilder("password", viewNode);
-                returnedResult = true;
             }
         }
 
@@ -92,7 +85,6 @@ public class Autofill extends AutofillService {
             traverseNode(childNode);
         }
 
-        return returnedResult;
     }
 
     public void populateResponseBuilder(String query, AssistStructure.ViewNode viewNode) {
