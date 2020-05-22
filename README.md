@@ -8,4 +8,4 @@
 ![Facebook login password](https://raw.githubusercontent.com/carlostojal/KeySafe/master/img/3.jpg)
 
 ### Login in the browser
-![Browser login](https://raw.githubusercontent.com/carlostojal/KeySafe/master/img/2.jpg)
+![Browser login](https://raw.githubusercontent.com/carlostojal/KeySafe/master/img/4.jpg)
