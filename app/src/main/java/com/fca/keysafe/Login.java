@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ public class Login extends AppCompatActivity {
 
         pin.setAutofillHints("pin", "password");
         pin.setHint("PIN");
+
     }
 
     @Override
@@ -39,4 +41,9 @@ public class Login extends AppCompatActivity {
         else
             Toast.makeText(this, "Wrong PIN.", Toast.LENGTH_SHORT).show();
     }
+
+    public void reset(){
+        setContentView(R.layout.activity_create_pin);
+    }
+
 }

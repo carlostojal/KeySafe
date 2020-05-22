@@ -44,12 +44,20 @@ public class Account {
         this.username = username;
     }
 
+
     public String getPassword() {
-        return password;
+        String dec = new String (decrypt(password.getBytes()));
+        String dec2 = new String (decrypt(dec.getBytes()));
+        return dec2;
+    }
+    public String getPasswordEnc() {
+        String enc = new String (encrypt(password.getBytes()));
+        return enc;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        String enc = new String (encrypt(password.getBytes()));
+        this.password = enc;
     }
 
     public String getLastChanged() {
@@ -99,4 +107,20 @@ public class Account {
             return date2.compareTo(date1);
         }
     };
+    public byte[]  encrypt(byte[] frase){
+        byte[] enc = new byte[frase.length];
+        for(int i=0;i<frase.length;i++){
+            enc[i] = (byte) ((i%2==0) ? frase[i]+1 : frase[i]-1);
+        }
+
+        return enc;
+    }
+
+    public byte[] decrypt(byte[] frase){
+        byte[] enc = new byte[frase.length];
+        for(int i=0;i<frase.length;i++){
+            enc[i] = (byte) ((i%2==0) ? frase[i]-1 : frase[i]+1);
+        }
+        return enc;
+    }
 }

@@ -9,7 +9,8 @@ public class User {
     }
 
     public User(String pin) {
-        this.pin = pin;
+        String enc = new String (encrypt(pin.getBytes()));
+        this.pin = enc;
     }
 
     public String getPin() {
@@ -19,4 +20,22 @@ public class User {
     public void setPin(String pin) {
         this.pin = pin;
     }
+
+    public String encrypt(byte[] frase){
+        byte[] enc = new byte[frase.length];
+        for(int i=0;i<frase.length;i++){
+            enc[i] = (byte) ((i%2==0) ? frase[i]+1 : frase[i]-1);
+        }
+        return enc.toString();
+    }
+
+    public String decrypt(byte[] frase){
+        byte[] enc = new byte[frase.length];
+        for(int i=0;i<frase.length;i++){
+            enc[i] = (byte) ((i%2==0) ? frase[i]-1 : frase[i]+1);
+        }
+        return enc.toString();
+    }
+
 }
+
