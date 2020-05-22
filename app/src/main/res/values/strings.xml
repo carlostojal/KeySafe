@@ -5,7 +5,7 @@
     <string name="create_pin">Create PIN</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="done">Done</string>
-    <string name="enable_keysafe_autofill_description">Enable KeySafe autofill functionality to have your saved credentials suggested in your apps.\nTo do that, search \"autofill\" in settings and select autofill settings. Change the autofill service to "KeySafe".\nJust that.</string>
+    <string name="enable_keysafe_autofill_description">Enable KeySafe autofill functionality to have your saved credentials suggested in your apps.\nTo do that, search \"autofill\" in settings and select autofill settings. Change the autofill service to "KeySafe".\nJust that.\n\nThis functionality is not compatible with android versions lower than 8.0 Oreo</string>
     <string name="login">Login</string>
     <string name="preview_image">Preview Image</string>
     <string name="service_name">Service Name</string>
