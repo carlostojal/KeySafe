@@ -88,7 +88,7 @@ public class Helpers {
             String s = null;
             while ((s = bufferedReader.readLine()) != null) {
                 Log.d(null, s);
-                accounts.add(new Account(s.split(";")[0], s.split(";")[1], s.split(";")[2], s.split(";")[3], s.split(";")[4]));
+                accounts.add(new Account(s.split(";")[0], s.split(";")[1],s.split(";")[2], s.split(";")[3], s.split(";")[4]));
             }
             fileInputStream.close();
             s = stringBuilder.toString();
@@ -111,7 +111,7 @@ public class Helpers {
             file.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(file, true);
             for (int i = 0; i < accounts.size(); i++)
-                fileOutputStream.write((accounts.get(i).getServiceName() + ";" + accounts.get(i).getUsername() + ";" + accounts.get(i).getPassword() + ";" + accounts.get(i).getLastChanged() + ";" + accounts.get(i).getPreviewImgUrl() + "\n").getBytes());
+                fileOutputStream.write((accounts.get(i).getServiceName() + ";" + accounts.get(i).getUsername() + ";" + accounts.get(i).getPasswordEnc() + ";" + accounts.get(i).getLastChanged() + ";" + accounts.get(i).getPreviewImgUrl() + "\n").getBytes());
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -141,4 +141,5 @@ public class Helpers {
         }
         return date1;
     }
+
 }
